@@ -1,41 +1,19 @@
-FROM node:10-alpine
-ONBUILD RUN "apt-get update && apt-get clean"
-ONBUILD RUN npm install -g express
-ONBUILD RUN npm install -g nodemon
+FROM node:12
 
 # Create app directory
-ONBUILD RUN mkdir -p /usr/src/app
-ONBUILD WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-EXPOSE 9000
-ONBUILD COPY package*.json ./
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
-ONBUILD RUN npm install
-# #RUN mkdir \app
-# WORKDIR /app
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-# ONBUILD COPY package.json package.json
-# ONBUILD RUN npm install
-# ONBUILD COPY . /app
-# Build the app
-#ONBUILD RUN npm run build
+# Bundle app source
+COPY . .
 
-# Specify port app runs on
-# ONBUILD EXPOSE 8080
-#CMD [ "npm.cmd", "start" ]
-ONBUILD CMD [ "node", "app" ]
-#RUN mkdir -p 'C:\Users\muhammad.shahan\Desktop\Learn JS\node_modules' && chown -R node:node 'C:\Users\muhammad.shahan\Desktop\Learn JS'
-
-#WORKDIR /home/node/app
-
-#COPY package*.json ./
-
-#USER node
-
-#RUN npm install
-
-#COPY --chown=node:node . .
-
-#EXPOSE 8080
-
-#CMD [ "node", "app.js" ]
+EXPOSE 8080
+CMD [ "node", "app.js" ]

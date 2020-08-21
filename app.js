@@ -24,7 +24,7 @@ router.get("/sharks",function(req,res){
 app.use(express.static(path));
 app.use("/", router);
 
-app.listen(9000, function () {
+app.listen(8080, function () {
   console.log('Example app listening on port 9000!')
 })
 //test
