@@ -1,7 +1,7 @@
 node {
     checkout scm
 
-    docker.withRegistry('https://hub.docker.com/repository/docker/muhammadshahan/jenkins', 'dockerHub') {
+    docker.withRegistry('https://hub.docker.com/repository/docker', 'dockerHub') {
 
         def customImage = docker.build("AIM:Docker-web")
 
