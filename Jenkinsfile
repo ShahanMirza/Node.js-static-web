@@ -1,11 +1,25 @@
 node {
-    checkout scm
-
-    docker.withRegistry('https://hub.docker.com/repository/docker', 'dockerHub') {
-
-        def customImage = docker.build("AIM:Docker-web")
-
-        /* Push the container to the custom Registry */
-        customImage.push()
+  try {
+    stage('Checkout') {
+      checkout scm
     }
+    stage('Environment') {
+      sh 'git --version'
+      echo "Branch: ${env.BRANCH_NAME}"
+      sh 'docker -v'
+      sh 'printenv'
+    }
+   
+    stage('Deploy'){
+      if(env.BRANCH_NAME == 'master'){
+        sh 'docker build -t react-app --no-cache .'
+        sh 'docker tag react-app localhost:5000/react-app'
+        sh 'docker push localhost:5000/react-app'
+        sh 'docker rmi -f react-app localhost:5000/react-app'
+      }
+    }
+  }
+  catch (err) {
+    throw err
+  }
 }
